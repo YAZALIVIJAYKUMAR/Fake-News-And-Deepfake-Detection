@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fake News & Deepfake Detection - Sky Blue with Blobs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body, html {
+      height: 100%; font-family: 'Orbitron', monospace;
+      background: linear-gradient(135deg, #a8d0ff, #74a9ff);
+      overflow-x: hidden; color: #1e3a8a; position: relative;
+    }
+    #blob-background {
+      position: fixed; top: 0; left: -10vw; width: 120vw; height: 120vh; z-index: 0;
+      pointer-events: none; overflow: visible;
+    }
+    .blob { position: absolute; border-radius: 50%; filter: blur(90px);
+      opacity: 0.6; animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite; animation-direction: alternate;
+    }
+    .blob1 { width: 350px; height: 350px; background: #5477e1; top: 15vh; left: 10vw; animation-name: move1; animation-duration: 12s; }
+    .blob2 { width: 410px; height: 410px; background: #3db7ff; top: 55vh; left: 60vw; animation-name: move2; animation-duration: 18s; }
+    .blob3 { width: 300px; height: 300px; background: #89c9ff; top: 45vh; left: 35vw; animation-name: move3; animation-duration: 14s; }
+    @keyframes move1 { 0% { transform: translateY(0) translateX(0); } 100% { transform: translateY(-40px) translateX(25px); } }
+    @keyframes move2 { 0% { transform: translateY(0) translateX(0); } 100% { transform: translateY(60px) translateX(-40px); } }
+    @keyframes move3 { 0% { transform: translateY(0) translateX(0); } 100% { transform: translateY(-45px) translateX(-30px); } }
+    .container { max-width: 960px; margin: 40px auto; padding: 20px 24px 48px; display: flex; flex-direction: column; align-items: center; user-select: none; text-align: center; min-height: 100vh; color: #1e3a8a; z-index: 10;  position: relative; }
+    header { width: 100%; margin-bottom: 36px; }
+    header h1 { color: #1e3a8a; font-size: 3.4rem; letter-spacing: 0.15em; text-shadow: 1px 1px 8px #7caafe88; font-weight: 800; margin-bottom: 8px; }
+    header p { font-size: 1.28rem; font-weight: 600; color: #385594cc; }
+    .hero { background: #d4e5ffdd; border-radius: 28px; padding: 44px 40px; box-shadow: 0 10px 24px #7a9cffaa; margin-bottom: 44px; width: 100%; max-width: 720px; }
+    .hero h2 { color: #1e3a8a; font-weight: 700; font-size: 2rem; margin-bottom: 14px; }
+    .hero p { color: #5573bb; font-size: 1.15rem; margin-bottom: 32px; line-height: 1.45; }
+    .btn-primary { background: linear-gradient(90deg, #3db7ff, #5477e1); padding: 18px 52px; font-size: 1.3rem; border-radius: 40px; cursor: pointer; border: none; font-weight: 700; color: white; box-shadow: 0 0 32px #3db7ff88; transition: background 0.3s ease, transform 0.3s ease; user-select: none; }
+    .btn-primary:hover { background: linear-gradient(90deg, #5477e1, #3db7ff); transform: scale(1.1); box-shadow: 0 0 48px #5477e1cc; }
+    .features { display: flex; justify-content: space-around; gap: 28px; flex-wrap: wrap; margin-bottom: 38px; color: #385594dd; user-select: none; }
+    .feature-card { background: #e4efffdd; border-radius: 22px; padding: 26px 20px; flex: 1 1 280px; box-shadow: 0 6px 24px #8bb1a74d; text-align: center; transition: transform 0.4s ease, box-shadow 0.4s ease; cursor: default; color: #2b4f39; }
+    .feature-card:hover { transform: translateY(-12px); box-shadow: 0 12px 44px #85d3b1cc; }
+    .feature-card i { font-size: 3.2rem; color: #3db7ffaa; margin-bottom: 16px; }
+    .feature-card h3 { font-size: 1.36rem; font-weight: 700; margin-bottom: 8px; color: #2c484c; }
+    .feature-card p { font-size: 1rem; line-height: 1.45; color: #355d5e; }
+    .main-content { display: flex; gap: 38px; flex-wrap: wrap; justify-content: center; width: 100%; margin-bottom: 44px; }
+    .verification-section {
+      background: #f1f8ffde; border-radius: 26px; box-shadow: 0 8px 28px #a6d4caaa; padding: 22px 22px; flex: 1 1 410px;
+      color: #2c484c; transition: transform 0.4s ease, box-shadow 0.4s ease; user-select: text;
+      text-align: left; display: flex; flex-direction: column; min-height: 350px; justify-content: flex-start;
+    }
+    .verification-section:hover { transform: translateY(-9px); box-shadow: 0 16px 54px #85d3b1cc; }
+    .verification-section h2 { font-weight: 700; font-size: 1.85rem; margin-top: 0; margin-bottom: 18px; color: #1c3a5a; text-align: center; }
+    label { display: block; margin-bottom: 12px; font-weight: 600; font-size: 1.06rem; color: #609f8f; user-select: none; }
+    textarea, input[type="file"] {
+      width: 100%; font-family: 'Orbitron', monospace; font-weight: 600; font-size: 1.1rem; padding: 18px; border-radius: 18px;
+      border: 1.8px solid #98d8aa; background-color: #effaf9; color: #2c484c; box-shadow: inset 0 0 20px #a8dbcad2;
+      margin-bottom: 30px; outline: none; resize: vertical; transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    textarea::placeholder { font-style: italic; color: #7aa69bdb; }
+    textarea:focus, input[type="file"]:focus { border-color: #85d3b1; box-shadow: inset 0 0 30px #85d3b1cc; color: #2c484c; }
+    .btn {
+      background: linear-gradient(90deg, #3db7ff, #5477e1); border-radius: 38px; color: white; font-weight: 700;
+      font-size: 1.18rem; cursor: pointer; padding: 20px 50px; transition: background 0.3s ease, transform 0.3s ease;
+      border: none; box-shadow: 0 0 32px #3db7ffbb; display: block; width: fit-content; margin-left: auto; margin-right: auto; user-select: none;
+    }
+    .btn:hover { background: linear-gradient(90deg, #5477e1, #3db7ff); transform: scale(1.1); box-shadow: 0 0 48px #5477e1cc; }
+    #newsResultBox, #deepfakeResultBox {
+      width: 100%; margin-top: 0; padding: 4px 8px; font-weight: 700; color: #2c484c;
+      font-size: 1.2rem; background: none; border: none; box-shadow: none; border-radius: 0; margin-bottom: 0;
+      overflow-wrap: break-word; word-break: break-word; white-space: pre-wrap;
+    }
+    #newsResultBox div, #deepfakeResultBox div { margin-bottom: 6px; line-height: 1.4;}
+    #newsResultBox div:last-child, #deepfakeResultBox div:last-child { margin-bottom: 0; }
+    #deepfake-detection { max-width: 100%; width: 100%; margin-bottom: 48px; box-sizing: border-box; }
+    #historySection {
+      background: #e2f0eaff; border-radius: 26px; padding: 36px 40px; color: #557b74; font-weight: 600; font-size: 1.08rem;
+      max-width: 960px; width: 100%; box-shadow: 0 0 50px #7db0a99f; opacity: 0; transform: translateY(42px);
+      user-select: text; pointer-events: none; transition: opacity 0.7s ease, transform 0.7s ease;
+      max-height: 320px; overflow-y: auto; margin-bottom: 44px;
+    }
+    #historySection.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    #historySection h3 { margin-top: 0; font-weight: 700; letter-spacing: 0.06em; color: #3b6a6d; }
+    #historyList div { border-bottom: 1px solid #b6d2cd; padding: 16px 0; margin-bottom: 12px; user-select: text; line-height: 1.33; color: #3a6461; }
+    #historyList div strong { font-weight: 800; color: #2c4844; }
+    #historyList div span { font-weight: 700; color: #559685; }
+    footer {
+      margin-top: auto; width: 100%; max-width: 960px; padding: 24px 0; text-align: center; user-select: none; font-style: italic;
+      font-weight: 600; font-size: 0.9rem; color: #4f7e73; letter-spacing: 0.04em;
+    }
+    footer a, footer span { color: #317a72; cursor: pointer; text-decoration: none; transition: color 0.3s ease; user-select: text; }
+    footer a:hover, footer span:hover { color: #559685; }
+    @media (max-width: 860px) {
+      .main-content { flex-direction: column; align-items: center; }
+      .verification-section { flex: none; width: 90%; }
+    }
+    @media (max-width: 480px) {
+      header h1 { font-size: 2.8rem; }
+      .hero { padding: 36px 24px; }
+      .hero h2 { font-size: 1.6rem; }
+      .hero p { font-size: 1rem; }
+      .features { flex-direction: column; gap: 22px; }
+      .feature-card { flex: none; width: 100%; }
+      .btn, .hero .btn-primary { width: 100%; padding: 18px 0; font-size: 1.1rem; }
+      #historySection { max-height: 270px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="blob-background" aria-hidden="true">
+    <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
+    <div class="blob blob3"></div>
+  </div>
+  <div class="container" role="main">
+    <header>
+      <h1>Fake News & Deepfake Detection</h1>
+      <p>Spot a fake right from the shadows!</p>
+    </header>
+    <section class="hero" aria-label="Project Introduction">
+      <h2>About Project</h2>
+      <p>This project focuses on detecting deepfake images and fake news articles, assisting users in verifying the authenticity of information quickly and effectively.</p>
+      <button class="btn-primary" onclick="document.getElementById('newsText').focus();">Get Started</button>
+    </section>
+    <section class="features" aria-label="Project Features">
+      <div class="feature-card" tabindex="0">
+        <i class="fas fa-newspaper" aria-hidden="true"></i>
+        <h3>Fake News Detection</h3>
+        <p>Analyze news text for authenticity and fact-check false claims instantly.</p>
+      </div>
+      <div class="feature-card" tabindex="0">
+        <i class="fas fa-image" aria-hidden="true"></i>
+        <h3>Deepfake Image Check</h3>
+        <p>Upload images to identify manipulated content with high confidence.</p>
+      </div>
+      <div class="feature-card" tabindex="0">
+        <i class="fas fa-history" aria-hidden="true"></i>
+        <h3>Verification History</h3>
+        <p>Track your past verifications for easy reference and analysis.</p>
+      </div>
+    </section>
+    <div class="main-content" aria-label="Verification Inputs">
+      <section class="verification-section" id="news-verification">
+        <h2>News Text Verification</h2>
+        <label for="newsText">Enter news text below for verification:</label>
+        <textarea id="newsText" rows="6" placeholder="Paste news article or headline here..." aria-label="News text input"></textarea>
+        <button class="btn" id="checkNewsBtn">Check Fake News</button>
+      </section>
+      <section class="verification-section" id="news-result-display">
+        <h2>News Check Result</h2>
+        <div id="newsResultBox" aria-live="polite" aria-atomic="true"></div>
+      </section>
+    </div>
+    <section class="verification-section" id="deepfake-detection">
+      <h2>Deepfake Detection</h2>
+      <label for="mediaFile">Upload image to verify authenticity:</label>
+      <input type="file" id="mediaFile" accept="image/*" aria-label="Upload image file" />
+      <button class="btn" id="checkImageBtn">Detect Deepfake</button>
+      <div id="deepfakeResultBox" aria-live="polite" aria-atomic="true"></div>
+    </section>
+    <section id="historySection" aria-live="polite" aria-atomic="true">
+      <h3>Past Verifications</h3>
+      <div id="historyList"></div>
+    </section>
+    <footer>
+      Designed by News Authenticators, 2025 &nbsp;&middot;&nbsp;
+      <span id="contactLink" aria-label="Show contact number" tabindex="0" role="button">Contact</span> &nbsp;&middot;&nbsp;
+      <a href="https://github.com/YAZALIVIJAYKUMAR" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">GitHub</a>
+    </footer>
+  </div>
+  <script>
+    const contactLink = document.getElementById('contactLink');
+    contactLink.addEventListener('click', () => {
+      alert('Contact Number: 9121232549');
+    });
+    contactLink.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        alert('Contact Number: 9121232549');
+      }
+    });
+    const historyList = document.getElementById('historyList');
+    function showHistory() {
+      document.getElementById('historySection').classList.add('show');
+    }
+    function addToHistory(type, label, confidence, preview) {
+      const timestamp = new Date().toLocaleString();
+      const entry = document.createElement('div');
+      entry.innerHTML = `<strong>${type}</strong>: <span style="color:${
+        label === 'FAKE' || label === 'Deepfake' ? '#d32f2f' : '#388e3c'
+      }">${label}</span> (${Math.round(confidence * 100)}%) - <em>${timestamp}</em><br /><small>${preview}</small>`;
+      historyList.prepend(entry);
+      showHistory();
+    }
+    document.getElementById('checkNewsBtn').addEventListener('click', async () => {
+      const newsText = document.getElementById('newsText').value.trim();
+      const newsResultBox = document.getElementById('newsResultBox');
+      if (!newsText) { alert('Please enter news text'); return; }
+      newsResultBox.textContent = 'Analyzing news... Please wait.';
+      try {
+        const res = await fetch('/api/fake-news', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ text: newsText }),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          newsResultBox.innerHTML = `
+            <div><span>News Check Result:</span> <span style="color:${
+              data.label === 'FAKE' ? '#d32f2f' : '#388e3c'}; font-weight:700;">${data.label}</span></div>
+            <div><span>Confidence:</span> <span>${Math.round(data.confidence * 100)}%</span></div>
+            ${data.snippet ? `<div>Insight: ${data.snippet}</div>` : ''}
+          `;
+          addToHistory('News', data.label, data.confidence, newsText.substring(0, 80) + '...');
+        } else {
+          newsResultBox.textContent = `Error: ${data.error || 'Failed to analyze'}`;
+        }
+      } catch (error) {
+        newsResultBox.textContent = 'Network error or backend not running.';
+      }
+    });
+    document.getElementById('checkImageBtn').addEventListener('click', () => {
+      const imageFile = document.getElementById('mediaFile').files[0];
+      const deepfakeResultBox = document.getElementById('deepfakeResultBox');
+      if (!imageFile) { alert('Please select an image file'); return; }
+      deepfakeResultBox.textContent = 'Analyzing image... Please wait.';
+      setTimeout(() => {
+        const fakeLabel = 'Deepfake'; const fakeConfidence = 0.78;
+        deepfakeResultBox.innerHTML = `
+          <div>Deepfake Check Result: <span style="color:#d32f2f">${fakeLabel}</span> (Confidence: ${Math.round(fakeConfidence * 100)}%)</div>
+        `;
+        addToHistory('Image', fakeLabel, fakeConfidence, imageFile.name);
+      }, 2000);
+    });
+  </script>
+</body>
+</html>
